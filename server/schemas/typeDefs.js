@@ -9,6 +9,15 @@ const typeDefs = gql`
     skills: [String]!
   }
 
+  type Story {
+    _id: ID
+    title: String!
+    userEmail: String!
+    content: String!
+    date: date
+    contributors: [ID]
+  }
+
   type Auth {
     token: ID!
     profile: Profile
@@ -19,6 +28,10 @@ const typeDefs = gql`
     profile(profileId: ID!): Profile
     # Because we have the context functionality in place to check a JWT and decode its data, we can use a query that will always find and return the logged in user's data
     me: Profile
+
+    myStories(email: String!): [Story]
+    otherStories: [story]
+    uniqueContributions(email: String!): [story]
   }
 
   type Mutation {
