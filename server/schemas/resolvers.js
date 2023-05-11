@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const { Profile } = require('../models');
+const { Profile, Story } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -18,6 +18,32 @@ const resolvers = {
       }
       throw new AuthenticationError('You need to be logged in!');
     },
+    myStories: async (parent, { email }) => {
+      if (context.user) {
+      return Story.find({
+        where: {
+          user_email: email
+        }
+      })
+    }
+    throw new AuthenticationError('You need to be logged in!');
+    },
+
+    otherStories: async (parent, args) => {
+      if (context.user) {
+      return Story.find({
+        where: {
+          user_email: {
+            $ne: user._id
+          }
+        }
+      })
+    }
+    throw new AuthenticationError('You need to be logged in!');
+    },
+
+
+
   },
 
   Mutation: {
